@@ -1,0 +1,11 @@
+country,customers,orders,revenue,revenue_per_customer,avg_order_value,revenue_share_pct
+USA,13,91,523.06,40.24,5.75,22.5
+Canada,8,56,303.96,37.99,5.43,13.1
+France,5,35,195.1,39.02,5.57,8.4
+Brazil,5,35,190.1,38.02,5.43,8.2
+Germany,4,28,156.48,39.12,5.59,6.7
+United Kingdom,3,21,112.86,37.62,5.37,4.8
+Czech Republic,2,14,90.24,45.12,6.45,3.9
+Portugal,2,14,77.24,38.62,5.52,3.3
+India,2,13,75.26,37.63,5.79,3.2
+Chile,1,7,46.62,46.62,6.66,2.0
