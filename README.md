@@ -36,8 +36,9 @@ Business questions about a digital music store, answered in **SQL**. The project
 ## Run it
 
 ```bash
-pip install -r requirements.txt
+pip install -r requirements.txt -r requirements-dev.txt
 python analysis.py     # downloads Chinook, runs sql/*.sql → results/*.csv, figures/, REPORT.md
+streamlit run app.py   # browse each question, its SQL, result and chart
 pytest                 # checks that query outputs reconcile with the raw tables
 ```
 
