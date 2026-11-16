@@ -31,9 +31,9 @@ with left:
 with right:
     if key in figures:
         st.subheader("Chart")
-        st.image(str(ROOT / "figures" / f"{figures[key]}.png"), use_container_width=True)
+        st.image(str(ROOT / "figures" / f"{figures[key]}.png"), width="stretch")
     st.subheader(f"Result ({len(df)} rows)")
-    st.dataframe(df, use_container_width=True, hide_index=True)
+    st.dataframe(df, width="stretch", hide_index=True)
 
 st.divider()
 st.markdown(
