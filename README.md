@@ -1,3 +1,5 @@
+<img src="assets/logo.svg" alt="" width="64" height="64">
+
 # Music Store SQL Analytics
 
 Business questions about a digital music store, answered in **SQL**. The project covers revenue trends, market sizing, a genre Pareto analysis, **RFM customer segmentation**, **cohort retention** and sales-rep rankings. One Python script runs every query, saves the results and builds a report with charts.
@@ -6,7 +8,7 @@ Business questions about a digital music store, answered in **SQL**. The project
 
 **Data:** the [Chinook sample database](https://github.com/lerocha/chinook-database), a widely used model of an iTunes-style store (59 customers, 412 invoices, 3,500 tracks). It's a teaching dataset, so the point here is the SQL techniques rather than the absolute numbers.
 
-👉 **Full results: [REPORT.md](REPORT.md)**
+**Full results: [REPORT.md](REPORT.md)**
 
 ## Questions and SQL techniques
 

@@ -4,9 +4,12 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
+LOGO = Path(__file__).parent / "assets" / "logo.png"
+
 ROOT = Path(__file__).parent
-st.set_page_config(page_title="Music Store SQL Analytics", page_icon="🎵", layout="wide")
-st.title("🎵 Music Store SQL Analytics")
+st.set_page_config(page_title="Music Store SQL Analytics", page_icon=str(LOGO), layout="wide")
+st.logo(str(LOGO), size="large")
+st.title("Music Store SQL Analytics")
 st.caption(
     "Seven business questions answered in SQL on the Chinook store database. "
     "Pick a question to see the query, its result and the chart."
