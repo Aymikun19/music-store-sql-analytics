@@ -1,0 +1,14 @@
+[theme]
+base = "light"
+primaryColor = "#4f46e5"
+backgroundColor = "#fafaf9"
+secondaryBackgroundColor = "#f1f0ee"
+textColor = "#1c1917"
+borderColor = "#e7e5e4"
+showWidgetBorder = true
+baseRadius = "medium"
+font = "sans-serif"
+chartCategoricalColors = ["#4f46e5", "#f59e0b", "#10b981", "#f97316", "#64748b", "#ec4899"]
+
+[client]
+toolbarMode = "minimal"

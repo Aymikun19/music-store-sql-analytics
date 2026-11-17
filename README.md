@@ -35,6 +35,12 @@ Business questions about a digital music store, answered in **SQL**. The project
   <img src="figures/rfm_segments.png" width="48%" />
 </p>
 
+## The app
+
+- **Overview**: revenue, orders, customers and average order value, with interactive charts of monthly revenue, genres, countries, RFM segments and cohort retention.
+- **Business questions**: each query next to its interactive chart and result table, with CSV download.
+- **SQL playground**: write your own queries against the database. Read-only by design: the file is opened in SQLite read-only mode, only one SELECT/WITH statement is accepted, an authorizer blocks writes and ATTACH, and a progress handler stops queries after 3 seconds (see `playground.py` and its tests).
+
 ## Run it
 
 ```bash
