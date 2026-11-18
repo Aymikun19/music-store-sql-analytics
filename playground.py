@@ -72,3 +72,28 @@ def schema(db: Path = DB) -> dict[str, list[tuple[str, str]]]:
         return {t: [(c[1], c[2]) for c in con.execute(f'pragma table_info("{t}")')] for t in tables}
     finally:
         con.close()
+
+
+def encode_share(sql: str) -> str:
+    """Compact, URL-safe token for a query, used in ?q= share links."""
+    import base64
+    import zlib
+
+    return base64.urlsafe_b64encode(zlib.compress(sql.strip().encode(), 9)).decode().rstrip("=")
+
+
+def decode_share(token: str, max_len: int = 10_000) -> str | None:
+    """Inverse of encode_share; returns None for anything malformed or oversized."""
+    import base64
+    import binascii
+    import zlib
+
+    try:
+        raw = base64.urlsafe_b64decode(token + "=" * (-len(token) % 4))
+        d = zlib.decompressobj()
+        out = d.decompress(raw, max_len + 1)
+        if len(out) > max_len or d.unconsumed_tail:
+            return None
+        return out.decode()
+    except (binascii.Error, zlib.error, UnicodeDecodeError, ValueError):
+        return None

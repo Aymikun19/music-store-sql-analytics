@@ -26,3 +26,23 @@ def test_cannot_write_through_cte():
 
 def test_validate_strips_trailing_semicolon():
     assert validate("select 1;") == "select 1"
+
+
+def test_share_token_round_trip():
+    from playground import decode_share, encode_share
+
+    sql = "select Name, count(*) from Track\ngroup by 1 -- ünïcode"
+    token = encode_share(sql)
+    assert "/" not in token and "+" not in token and "=" not in token
+    assert decode_share(token) == sql.strip()
+
+
+def test_share_token_rejects_garbage_and_bombs():
+    import base64
+    import zlib
+
+    from playground import decode_share
+
+    assert decode_share("not-a-token!!") is None
+    bomb = base64.urlsafe_b64encode(zlib.compress(b"a" * 50_000)).decode()
+    assert decode_share(bomb) is None

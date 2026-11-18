@@ -7,7 +7,8 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
-from playground import MAX_ROWS, QueryError, run, schema
+from playground import decode_share, encode_share, MAX_ROWS, QueryError, run, schema
+APP_URL = "https://oreoluwa-sql-analytics.streamlit.app"
 
 ROOT = Path(__file__).parent
 LOGO = ROOT / "assets" / "logo.png"
@@ -105,22 +106,42 @@ with tab_sql:
         "Customers per country": "select Country, count(*) as customers\nfrom Customer\ngroup by Country\norder by customers desc",
         "Longest tracks": "select Name, round(Milliseconds / 60000.0, 1) as minutes\nfrom Track\norder by Milliseconds desc\nlimit 10",
     }
+    if "sql" not in st.session_state:
+        shared = decode_share(st.query_params.get("q", "")) if st.query_params.get("q") else None
+        st.session_state["sql"] = shared or examples["Best-selling tracks"]
+        if shared:
+            st.info("Loaded a shared query. Press Run query to see the results.")
+    history: list[dict] = st.session_state.setdefault("history", [])
     left, right = st.columns([2.2, 1], gap="large")
     with right:
         st.markdown("**Examples**")
         for name, sql in examples.items():
             if st.button(name, width="stretch"):
                 st.session_state["sql"] = sql
+        if history:
+            st.markdown("**Your recent queries**")
+            for i, h in enumerate(history):
+                first = " ".join(h["sql"].split())[:48]
+                if st.button(f"{first}{'...' if len(h['sql']) > 48 else ''}", key=f"hist{i}", width="stretch", help=f"{h['rows']:,} rows · {h['ms']:.0f} ms"):
+                    st.session_state["sql"] = h["sql"]
+            if st.button("Clear history", type="tertiary"):
+                st.session_state["history"] = []
+                st.rerun()
         st.markdown("**Schema**")
         for table, cols in schema().items():
             with st.expander(table):
                 st.markdown("\n".join(f"- `{c}` {t.lower()}" for c, t in cols))
     with left:
-        sql = st.text_area("SQL", key="sql", height=220, value=st.session_state.get("sql", examples["Best-selling tracks"]), label_visibility="collapsed")
+        sql = st.text_area("SQL", key="sql", height=220, label_visibility="collapsed")
         if st.button("Run query", type="primary"):
             try:
                 out, secs, truncated = run(sql)
                 st.success(f"{len(out):,} rows in {secs * 1000:.0f} ms" + (f" (first {MAX_ROWS:,} shown)" if truncated else ""))
+                entry = {"sql": sql.strip(), "rows": len(out), "ms": secs * 1000}
+                st.session_state["history"] = [entry] + [h for h in history if h["sql"] != entry["sql"]][:9]
+                st.query_params["q"] = encode_share(sql)
+                st.markdown("**Share this query**")
+                st.code(f"{APP_URL}/?q={encode_share(sql)}", language=None, wrap_lines=True)
                 st.dataframe(out, width="stretch", hide_index=True)
                 num = out.select_dtypes("number").columns
                 if len(out) > 1 and len(num) and len(out.columns) >= 2 and out.columns[0] not in num:
